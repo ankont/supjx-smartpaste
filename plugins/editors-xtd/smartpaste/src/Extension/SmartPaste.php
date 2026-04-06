@@ -18,7 +18,7 @@ use Joomla\Event\SubscriberInterface;
 
 final class SmartPaste extends CMSPlugin implements SubscriberInterface
 {
-    private const VERSION = '0.2.3';
+    private const VERSION = '0.3.0';
     private const SCRIPT_OPTIONS_KEY = 'plg_editors_xtd_smartpaste';
 
     protected $autoloadLanguage = true;
@@ -50,7 +50,7 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
             'smartpaste',
             [
                 'text' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_BUTTON'),
-                'icon' => 'clipboard',
+                'icon' => 'paste',
                 'action' => 'supersoft-smartpaste',
             ],
             [
@@ -118,15 +118,15 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                 'outputLabel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OUTPUT_LABEL'),
                 'outputHint' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OUTPUT_HINT'),
                 'buttons' => [
-                    'useSelection' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_USE_SELECTION'),
                     'showHtml' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SHOW_HTML'),
                     'showPaste' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SHOW_PASTE'),
                     'showPreview' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SHOW_PREVIEW'),
                     'clear' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_CLEAR'),
+                    'cleanAll' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_CLEAN_ALL'),
+                    'keepMore' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_KEEP_MORE'),
                     'reset' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_RESET'),
                     'cancel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CANCEL'),
                     'insert' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_INSERT_CLEAN'),
-                    'close' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CLOSE'),
                     'keep' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_KEEP'),
                     'drop' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_DROP'),
                     'remove' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_REMOVE'),
@@ -141,9 +141,11 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                     'images' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_IMAGES'),
                     'tables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_TABLES'),
                     'lang' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_LANG'),
+                    'dir' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_DIR'),
                     'comments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_COMMENTS'),
                     'office' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_OFFICE'),
                     'spans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_SPANS'),
+                    'containers' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_CONTAINERS'),
                     'semantic' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_SEMANTIC'),
                     'unsafe' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_UNSAFE'),
                 ],
@@ -154,9 +156,11 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                     'keepImages' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_IMAGES'),
                     'keepTables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_TABLES'),
                     'keepLang' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_LANG'),
+                    'keepDir' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_DIR'),
                     'removeComments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_COMMENTS'),
                     'removeOfficeMarkup' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_OFFICE'),
                     'removeEmptySpans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_EMPTY_SPANS'),
+                    'unwrapContainers' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_UNWRAP_CONTAINERS'),
                     'semanticFormatting' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_SEMANTIC'),
                     'unsafe' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_UNSAFE'),
                 ],
@@ -167,9 +171,11 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                     'keepImages' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_IMAGES_TITLE'),
                     'keepTables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_TABLES_TITLE'),
                     'keepLang' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_LANG_TITLE'),
+                    'keepDir' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_DIR_TITLE'),
                     'removeComments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_COMMENTS_TITLE'),
                     'removeOfficeMarkup' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_OFFICE_TITLE'),
                     'removeEmptySpans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_EMPTY_SPANS_TITLE'),
+                    'unwrapContainers' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_UNWRAP_CONTAINERS_TITLE'),
                     'semanticFormatting' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_SEMANTIC_TITLE'),
                     'unsafe' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_UNSAFE_TITLE'),
                 ],

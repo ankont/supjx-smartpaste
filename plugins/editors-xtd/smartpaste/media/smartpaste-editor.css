@@ -20,6 +20,7 @@
 
 .sjx-smartpaste-modal {
   width: min(100%, 90rem);
+  height: min(92vh, 72rem);
   max-height: min(92vh, 72rem);
   display: flex;
   flex-direction: column;
@@ -75,14 +76,13 @@
   font-weight: 500;
 }
 
-.sjx-smartpaste-modal__close {
-  padding: 0;
-  text-decoration: none;
-}
-
 .sjx-smartpaste-modal__body {
-  padding: 1.25rem;
-  overflow: auto;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+  padding: 1rem 1.25rem;
+  overflow: hidden;
 }
 
 .sjx-smartpaste-panel__hint,
@@ -97,7 +97,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin: 0 0 1rem;
+  align-self: flex-start;
+  margin: 0;
   padding: 0.55rem 0.8rem;
   border-radius: 999px;
   background: #ecf7ed;
@@ -111,21 +112,28 @@
 }
 
 .sjx-smartpaste-workspace {
-  display: grid;
-  gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 0.85rem;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .sjx-smartpaste-workspace__top {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.85rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: stretch;
 }
 
 .sjx-smartpaste-panel {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
-  padding: 1rem;
+  gap: 0.7rem;
+  padding: 0.9rem;
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 0.95rem;
   background: linear-gradient(180deg, rgba(255, 255, 255, 1), rgba(248, 250, 252, 0.92));
@@ -133,8 +141,13 @@
 
 .sjx-smartpaste-panel--source,
 .sjx-smartpaste-panel--preview {
-  min-height: clamp(24rem, 52vh, 33rem);
-  max-height: clamp(24rem, 52vh, 33rem);
+  min-height: clamp(17rem, 35vh, 22rem);
+  height: 100%;
+  max-height: none;
+}
+
+.sjx-smartpaste-panel--formatting {
+  flex: 0 0 auto;
 }
 
 .sjx-smartpaste-panel__header {
@@ -178,13 +191,31 @@
 }
 
 .sjx-smartpaste-panel__actions--footer {
+  margin-top: auto;
   padding-top: 0.1rem;
   border-top: 1px solid rgba(15, 23, 42, 0.06);
 }
 
+.sjx-smartpaste-panel__action-group {
+  display: inline-flex;
+}
+
+.sjx-smartpaste-field__meta {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
 .sjx-smartpaste-field__label {
   display: block;
+  margin: 0;
   font-weight: 700;
+}
+
+.sjx-smartpaste-field__hint {
+  margin: 0;
+  font-size: 0.92rem;
 }
 
 .sjx-smartpaste-paste-surface,
@@ -253,16 +284,18 @@
 
 .sjx-smartpaste-formatting-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: 0.65rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem;
+  overflow: visible;
+  align-content: start;
 }
 
 .sjx-smartpaste-formatting-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.65rem 0.75rem;
+  gap: 0.55rem;
+  padding: 0.55rem 0.65rem;
   border-radius: 0.8rem;
   background: rgba(241, 245, 249, 0.9);
   transition: opacity 0.18s ease;
@@ -276,8 +309,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 1.95rem;
-  height: 1.95rem;
+  min-width: 1.8rem;
+  height: 1.8rem;
   padding: 0 0.35rem;
   border-radius: 999px;
   background: rgba(13, 110, 253, 0.14);
@@ -292,11 +325,9 @@
 
 .sjx-smartpaste-formatting-row__label {
   display: block;
-  overflow: hidden;
   font-weight: 600;
   line-height: 1.25;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .sjx-smartpaste-formatting-row__controls {
@@ -313,7 +344,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 3.2rem;
+  min-width: 3rem;
   padding: 0.35rem 0.75rem;
   border: 1px solid rgba(220, 53, 69, 0.16);
   border-radius: 999px;
@@ -341,6 +372,18 @@
 }
 
 @media (max-width: 1180px) {
+  .sjx-smartpaste-modal__body {
+    overflow: auto;
+  }
+
+  .sjx-smartpaste-workspace {
+    overflow: visible;
+  }
+
+  .sjx-smartpaste-formatting-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
   .sjx-smartpaste-workspace__top {
     grid-template-columns: 1fr;
   }
@@ -349,6 +392,13 @@
   .sjx-smartpaste-panel--preview {
     min-height: 26rem;
     max-height: 26rem;
+  }
+
+}
+
+@media (max-width: 980px) {
+  .sjx-smartpaste-formatting-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -379,6 +429,10 @@
 
   .sjx-smartpaste-formatting-row {
     grid-template-columns: auto 1fr;
+  }
+
+  .sjx-smartpaste-formatting-grid {
+    grid-template-columns: 1fr;
   }
 
   .sjx-smartpaste-formatting-row__controls,

@@ -8,7 +8,7 @@
   <authorUrl>https://superor.wordpress.com</authorUrl>
   <copyright>(C) SuperSoft</copyright>
   <license>GNU General Public License version 3 or later; see LICENSE</license>
-    <version>0.2.3</version>
+    <version>0.3.0</version>
   <description>PKG_SMARTPASTE_XML_DESCRIPTION</description>
   <languages folder="language">
     <language tag="en-GB">en-GB/pkg_smartpaste.ini</language>
