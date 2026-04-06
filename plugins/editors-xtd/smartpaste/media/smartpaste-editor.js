@@ -128,19 +128,19 @@ import { JoomlaEditorButton } from "editor-api";
           unsafe: String(optionLabels.unsafe || "Unsafe Content")
         },
         optionTitles: {
-          keepInlineStyles: String(optionTitles.keepInlineStyles || "Keep inline visual styles"),
-          keepClasses: String(optionTitles.keepClasses || "Keep CSS class names"),
-          keepLinks: String(optionTitles.keepLinks || "Keep links"),
-          keepImages: String(optionTitles.keepImages || "Keep images"),
-          keepTables: String(optionTitles.keepTables || "Keep tables"),
-          keepLang: String(optionTitles.keepLang || "Keep language tags"),
-          keepDir: String(optionTitles.keepDir || "Keep text direction markers"),
-          removeComments: String(optionTitles.removeComments || "Remove HTML comments"),
-          removeOfficeMarkup: String(optionTitles.removeOfficeMarkup || "Remove Word/Office markup"),
-          removeEmptySpans: String(optionTitles.removeEmptySpans || "Remove generic inline wrappers"),
-          unwrapContainers: String(optionTitles.unwrapContainers || "Remove generic block wrappers"),
-          semanticFormatting: String(optionTitles.semanticFormatting || "Convert bold/italic tags to cleaner markup"),
-          unsafe: String(optionTitles.unsafe || "Unsafe content is always removed")
+          keepInlineStyles: String(optionTitles.keepInlineStyles || "Keep visual styling written directly on the pasted content, such as colors, font sizes, alignment, and spacing."),
+          keepClasses: String(optionTitles.keepClasses || "Keep CSS class names from the source. Most users can remove these unless the pasted HTML depends on site-specific styling."),
+          keepLinks: String(optionTitles.keepLinks || "Keep clickable links in the pasted content. Turn this off to keep only the visible text."),
+          keepImages: String(optionTitles.keepImages || "Keep pasted images. Turn this off if you only want text content."),
+          keepTables: String(optionTitles.keepTables || "Keep table layout and cells. Turn this off to flatten tables into plain text lines."),
+          keepLang: String(optionTitles.keepLang || "Keep language markers such as lang=\"en-GB\". These usually matter only for pronunciation, spellchecking, or accessibility."),
+          keepDir: String(optionTitles.keepDir || "Keep text-direction markers such as left-to-right or right-to-left. Useful for mixed-language content."),
+          removeComments: String(optionTitles.removeComments || "Remove hidden HTML comments that visitors never see."),
+          removeOfficeMarkup: String(optionTitles.removeOfficeMarkup || "Remove extra markup added by Microsoft Word and Office apps. This usually makes the result much cleaner."),
+          removeEmptySpans: String(optionTitles.removeEmptySpans || "Remove generic inline wrapper tags that usually add no visible value after cleanup."),
+          unwrapContainers: String(optionTitles.unwrapContainers || "Remove generic block wrapper tags such as extra div, section, or article containers while keeping their content."),
+          semanticFormatting: String(optionTitles.semanticFormatting || "Replace old bold/italic tags with cleaner semantic markup without changing the visible result."),
+          unsafe: String(optionTitles.unsafe || "Scripts, embeds, forms, and other unsafe content are always removed for safety.")
         }
       }
     };

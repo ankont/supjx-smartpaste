@@ -18,7 +18,7 @@ use Joomla\Event\SubscriberInterface;
 
 final class SmartPaste extends CMSPlugin implements SubscriberInterface
 {
-    private const VERSION = '0.3.0';
+    private const VERSION = '1.0.0';
     private const SCRIPT_OPTIONS_KEY = 'plg_editors_xtd_smartpaste';
 
     protected $autoloadLanguage = true;

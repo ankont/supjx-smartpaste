@@ -11,7 +11,7 @@ The intended long-term workflow is:
 5. Choose what should be kept or removed.
 6. Insert cleaned, controlled HTML back into the active editor.
 
-This repository now provides an installable Joomla starter package plus an early working SmartPaste workspace for future development.
+This repository now provides an installable Joomla package with the first stable SmartPaste workspace release.
 
 ## What Is Included
 
@@ -41,7 +41,7 @@ The current package gives you:
 - English and Greek language files for the package and plugin
 - a straightforward PowerShell build script for producing installable zip files
 
-This is still an early implementation. The workspace is client-side only and intentionally conservative, but it already supports a realistic inspect-clean-preview-insert flow.
+Version `1.0.0` is the first stable SmartPaste release for the current scope. The workspace is client-side only and intentionally conservative, but it already supports a practical inspect-clean-preview-insert flow.
 
 ## Architectural Direction
 
@@ -86,14 +86,14 @@ powershell -ExecutionPolicy Bypass -File .\build\build.ps1
 The build creates:
 
 - `build/output/plg_editors_xtd_smartpaste.zip`
-- `build/output/pkg_smartpaste_v0.3.0.zip`
+- `build/output/pkg_smartpaste_v1.0.0.zip`
 
 The package zip is the normal installer artifact for Joomla. The plugin zip is also produced separately for convenience.
 
 ## Install
 
 1. Build the package.
-2. In Joomla administrator, install `build/output/pkg_smartpaste_v0.3.0.zip`.
+2. In Joomla administrator, install `build/output/pkg_smartpaste_v1.0.0.zip`.
 3. Enable `Button - SuperSoftJx - SmartPaste` if it is not enabled automatically.
 4. Open a supported editor in the administrator area and confirm the `SmartPaste` button appears.
 5. Click the button to open the SmartPaste workspace, paste test content, review the preview, and insert cleaned HTML.
