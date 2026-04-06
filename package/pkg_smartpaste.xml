@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="package" version="5.0" method="upgrade">
+  <name>PKG_SMARTPASTE</name>
+  <packagename>smartpaste</packagename>
+  <creationDate>2026-04-06</creationDate>
+  <author>SuperSoft</author>
+  <authorEmail>an_kont@yahoo.gr</authorEmail>
+  <authorUrl>https://superor.wordpress.com</authorUrl>
+  <copyright>(C) SuperSoft</copyright>
+  <license>GNU General Public License version 3 or later; see LICENSE</license>
+  <version>0.1.0</version>
+  <description>PKG_SMARTPASTE_XML_DESCRIPTION</description>
+  <languages folder="language">
+    <language tag="en-GB" client="administrator">en-GB/pkg_smartpaste.ini</language>
+    <language tag="en-GB" client="administrator">en-GB/pkg_smartpaste.sys.ini</language>
+    <language tag="el-GR" client="administrator">el-GR/pkg_smartpaste.ini</language>
+    <language tag="el-GR" client="administrator">el-GR/pkg_smartpaste.sys.ini</language>
+  </languages>
+  <files folder="packages">
+    <file type="plugin" id="smartpaste" group="editors-xtd">plg_editors_xtd_smartpaste.zip</file>
+  </files>
+</extension>

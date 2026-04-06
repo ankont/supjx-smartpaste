@@ -1,0 +1,23 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "plg_editors_xtd_smartpaste",
+  "version": "0.1.0",
+  "assets": [
+    {
+      "name": "smartpaste-editor",
+      "type": "script",
+      "uri": "plg_editors_xtd_smartpaste/smartpaste-editor.js",
+      "dependencies": [
+        "editors"
+      ],
+      "attributes": {
+        "type": "module"
+      }
+    },
+    {
+      "name": "smartpaste-editor",
+      "type": "style",
+      "uri": "plg_editors_xtd_smartpaste/smartpaste-editor.css"
+    }
+  ]
+}

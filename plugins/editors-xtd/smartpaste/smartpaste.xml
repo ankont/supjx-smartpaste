@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="plugin" group="editors-xtd" method="upgrade">
+  <name>PLG_EDITORS-XTD_SMARTPASTE</name>
+  <author>SuperSoft</author>
+  <creationDate>2026-04-06</creationDate>
+  <copyright>(C) SuperSoft</copyright>
+  <license>GNU General Public License version 3 or later; see LICENSE</license>
+  <authorEmail>an_kont@yahoo.gr</authorEmail>
+  <authorUrl>https://superor.wordpress.com</authorUrl>
+  <element>smartpaste</element>
+  <version>0.1.0</version>
+  <description>PLG_EDITORS-XTD_SMARTPASTE_XML_DESCRIPTION</description>
+  <namespace path="src">SuperSoft\Plugin\EditorsXtd\SmartPaste</namespace>
+  <files>
+    <folder plugin="smartpaste">services</folder>
+    <filename>smartpaste.php</filename>
+    <folder>src</folder>
+  </files>
+  <languages folder="language">
+    <language tag="en-GB" client="administrator">en-GB/plg_editors-xtd_smartpaste.ini</language>
+    <language tag="en-GB" client="administrator">en-GB/plg_editors-xtd_smartpaste.sys.ini</language>
+    <language tag="el-GR" client="administrator">el-GR/plg_editors-xtd_smartpaste.ini</language>
+    <language tag="el-GR" client="administrator">el-GR/plg_editors-xtd_smartpaste.sys.ini</language>
+  </languages>
+  <media destination="plg_editors_xtd_smartpaste" folder="media">
+    <filename>joomla.asset.json</filename>
+    <filename>smartpaste-editor.css</filename>
+    <filename>smartpaste-editor.js</filename>
+  </media>
+</extension>

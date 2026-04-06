@@ -1,0 +1,126 @@
+.sjx-smartpaste-modal-open {
+  overflow: hidden;
+}
+
+.sjx-smartpaste-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1080;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: rgba(20, 30, 44, 0.58);
+}
+
+.sjx-smartpaste-modal-backdrop.is-active {
+  display: flex;
+}
+
+.sjx-smartpaste-modal {
+  width: min(100%, 52rem);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--bs-body-bg, #fff);
+  color: var(--bs-body-color, #212529);
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  border-radius: 0.9rem;
+  box-shadow: 0 2rem 4rem rgba(15, 23, 42, 0.22);
+}
+
+.sjx-smartpaste-modal__header,
+.sjx-smartpaste-modal__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+}
+
+.sjx-smartpaste-modal__header {
+  border-bottom: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.sjx-smartpaste-modal__footer {
+  justify-content: flex-end;
+  border-top: 1px solid rgba(17, 24, 39, 0.08);
+}
+
+.sjx-smartpaste-modal__title {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.sjx-smartpaste-modal__close {
+  padding: 0;
+  text-decoration: none;
+}
+
+.sjx-smartpaste-modal__body {
+  padding: 1.25rem;
+  overflow: auto;
+}
+
+.sjx-smartpaste-modal__intro,
+.sjx-smartpaste-modal__note {
+  margin: 0 0 0.9rem;
+  line-height: 1.5;
+}
+
+.sjx-smartpaste-modal__note {
+  color: var(--bs-secondary-color, #5c6773);
+}
+
+.sjx-smartpaste-modal__label {
+  display: block;
+  margin-bottom: 0.55rem;
+  font-weight: 600;
+}
+
+.sjx-smartpaste-modal__textarea {
+  width: 100%;
+  min-height: 14rem;
+  padding: 0.85rem 1rem;
+  resize: vertical;
+  border: 1px solid rgba(17, 24, 39, 0.16);
+  border-radius: 0.75rem;
+  background: var(--bs-body-bg, #fff);
+  color: inherit;
+  line-height: 1.5;
+}
+
+.sjx-smartpaste-modal__textarea:focus {
+  outline: 2px solid rgba(13, 110, 253, 0.25);
+  outline-offset: 1px;
+  border-color: rgba(13, 110, 253, 0.5);
+}
+
+.sjx-smartpaste-placeholder {
+  border-left: 4px solid #0d6efd;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+  background: #f4f8ff;
+}
+
+.sjx-smartpaste-placeholder p {
+  margin: 0 0 0.75rem;
+}
+
+.sjx-smartpaste-placeholder p:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .sjx-smartpaste-modal-backdrop {
+    padding: 1rem;
+  }
+
+  .sjx-smartpaste-modal__header,
+  .sjx-smartpaste-modal__footer,
+  .sjx-smartpaste-modal__body {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+}
