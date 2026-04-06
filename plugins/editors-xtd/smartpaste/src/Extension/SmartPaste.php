@@ -17,6 +17,7 @@ use Joomla\Event\SubscriberInterface;
 
 final class SmartPaste extends CMSPlugin implements SubscriberInterface
 {
+    private const ASSET_NAME = 'plg.editorsxtd.smartpaste';
     private const SCRIPT_OPTIONS_KEY = 'plg_editors_xtd_smartpaste';
 
     protected $autoloadLanguage = true;
@@ -98,8 +99,8 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
         );
 
         $wa->useScript('editors');
-        $wa->useScript('plg_editors_xtd_smartpaste.smartpaste-editor');
-        $wa->useStyle('plg_editors_xtd_smartpaste.smartpaste-editor');
+        $wa->useScript(self::ASSET_NAME);
+        $wa->useStyle(self::ASSET_NAME);
 
         $loaded = true;
     }
