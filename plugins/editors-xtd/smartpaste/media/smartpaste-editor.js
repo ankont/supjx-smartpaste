@@ -40,6 +40,7 @@ import { JoomlaEditorButton } from "editor-api";
     const buttons = strings.buttons || {};
     const counts = strings.counts || {};
     const optionLabels = strings.options || {};
+    const optionTitles = strings.optionTitles || {};
 
     return {
       strings: {
@@ -48,10 +49,10 @@ import { JoomlaEditorButton } from "editor-api";
         note: String(strings.note || "Unsafe tags are always stripped before preview and insert."),
         selectionLoaded: String(strings.selectionLoaded || "The current editor selection was loaded as the starting source."),
         pasteLabel: String(strings.pasteLabel || "Paste Pad"),
-        pasteHint: String(strings.pasteHint || "Paste rich content here and inspect the HTML below."),
+        pasteHint: String(strings.pasteHint || "Paste rich content here. Open the HTML view only when you want to inspect or edit the raw source."),
         pastePlaceholder: String(strings.pastePlaceholder || "Paste rich content here..."),
         htmlLabel: String(strings.htmlLabel || "Captured HTML"),
-        htmlHint: String(strings.htmlHint || "Edit the captured HTML directly before insertion."),
+        htmlHint: String(strings.htmlHint || "Optional raw HTML view for direct edits."),
         analysisTitle: String(strings.analysisTitle || "Detected Formatting"),
         analysisEmpty: String(strings.analysisEmpty || "Paste or load content to see the detected formatting groups."),
         unsafeNotice: String(strings.unsafeNotice || "Unsafe tags such as scripts and iframes are always stripped."),
@@ -62,11 +63,15 @@ import { JoomlaEditorButton } from "editor-api";
         outputHint: String(strings.outputHint || "This is the HTML that will be inserted into the active editor."),
         buttons: {
           useSelection: String(buttons.useSelection || "Use Selection"),
+          showHtml: String(buttons.showHtml || "Show HTML"),
+          hideHtml: String(buttons.hideHtml || "Hide HTML"),
           clear: String(buttons.clear || "Clear"),
           reset: String(buttons.reset || "Reset"),
           cancel: String(buttons.cancel || "Cancel"),
           insert: String(buttons.insert || "Insert Cleaned HTML"),
-          close: String(buttons.close || "Close")
+          close: String(buttons.close || "Close"),
+          yes: String(buttons.yes || "Yes"),
+          no: String(buttons.no || "No")
         },
         counts: {
           styles: String(counts.styles || "Inline styles"),
@@ -79,15 +84,26 @@ import { JoomlaEditorButton } from "editor-api";
           unsafe: String(counts.unsafe || "Unsafe tags")
         },
         options: {
-          keepInlineStyles: String(optionLabels.keepInlineStyles || "Keep inline styles"),
-          keepClasses: String(optionLabels.keepClasses || "Keep CSS classes"),
-          keepLinks: String(optionLabels.keepLinks || "Keep links"),
-          keepImages: String(optionLabels.keepImages || "Keep images"),
-          keepTables: String(optionLabels.keepTables || "Keep tables"),
-          removeComments: String(optionLabels.removeComments || "Remove HTML comments"),
-          removeOfficeMarkup: String(optionLabels.removeOfficeMarkup || "Remove Office-specific markup"),
-          removeEmptySpans: String(optionLabels.removeEmptySpans || "Unwrap empty or generic spans"),
-          semanticFormatting: String(optionLabels.semanticFormatting || "Convert <b>/<i> to semantic tags")
+          keepInlineStyles: String(optionLabels.keepInlineStyles || "Styles"),
+          keepClasses: String(optionLabels.keepClasses || "Classes"),
+          keepLinks: String(optionLabels.keepLinks || "Links"),
+          keepImages: String(optionLabels.keepImages || "Images"),
+          keepTables: String(optionLabels.keepTables || "Tables"),
+          removeComments: String(optionLabels.removeComments || "Comments"),
+          removeOfficeMarkup: String(optionLabels.removeOfficeMarkup || "Office"),
+          removeEmptySpans: String(optionLabels.removeEmptySpans || "Spans"),
+          semanticFormatting: String(optionLabels.semanticFormatting || "Semantic")
+        },
+        optionTitles: {
+          keepInlineStyles: String(optionTitles.keepInlineStyles || "Keep inline styles"),
+          keepClasses: String(optionTitles.keepClasses || "Keep CSS classes"),
+          keepLinks: String(optionTitles.keepLinks || "Keep links"),
+          keepImages: String(optionTitles.keepImages || "Keep images"),
+          keepTables: String(optionTitles.keepTables || "Keep tables"),
+          removeComments: String(optionTitles.removeComments || "Remove HTML comments"),
+          removeOfficeMarkup: String(optionTitles.removeOfficeMarkup || "Remove Office-specific markup"),
+          removeEmptySpans: String(optionTitles.removeEmptySpans || "Unwrap empty or generic spans"),
+          semanticFormatting: String(optionTitles.semanticFormatting || "Convert <b>/<i> to semantic tags")
         }
       }
     };
@@ -581,10 +597,11 @@ import { JoomlaEditorButton } from "editor-api";
 
     STAT_ORDER.forEach((key) => {
       const card = createElement("div", "sjx-smartpaste-analysis-card");
-      const label = createElement("span", "sjx-smartpaste-analysis-card__label", modal.options.strings.counts[key]);
       const value = createElement("strong", "sjx-smartpaste-analysis-card__value", String(analysis[key] || 0));
+      const label = createElement("span", "sjx-smartpaste-analysis-card__label", modal.options.strings.counts[key]);
 
-      card.append(label, value);
+      card.title = modal.options.strings.counts[key];
+      card.append(value, label);
       grid.appendChild(card);
     });
 
@@ -593,15 +610,16 @@ import { JoomlaEditorButton } from "editor-api";
 
   function readFilters(modal) {
     return FILTER_ORDER.reduce((result, key) => {
-      result[key] = Boolean(modal.filterInputs[key]?.checked);
+      result[key] = Boolean(modal.filterInputs[key]?.yes?.checked);
       return result;
     }, {});
   }
 
   function applyFiltersToInputs(modal, filters) {
     FILTER_ORDER.forEach((key) => {
-      if (modal.filterInputs[key]) {
-        modal.filterInputs[key].checked = Boolean(filters[key]);
+      if (modal.filterInputs[key]?.yes && modal.filterInputs[key]?.no) {
+        modal.filterInputs[key].yes.checked = Boolean(filters[key]);
+        modal.filterInputs[key].no.checked = !Boolean(filters[key]);
       }
     });
   }
@@ -633,6 +651,17 @@ import { JoomlaEditorButton } from "editor-api";
     modal.status.textContent = content;
   }
 
+  function setHtmlPanelVisibility(modal, isVisible) {
+    const visible = Boolean(isVisible);
+
+    modal.htmlVisible = visible;
+    modal.htmlSection.hidden = !visible;
+    modal.htmlToggleButton.textContent = visible
+      ? modal.options.strings.buttons.hideHtml
+      : modal.options.strings.buttons.showHtml;
+    modal.htmlToggleButton.setAttribute("aria-expanded", String(visible));
+  }
+
   function loadSourceIntoWorkspace(modal, source, options = {}) {
     const rawSource = String(source || "").trim();
     const syncSurface = options.syncSurface !== false;
@@ -656,21 +685,67 @@ import { JoomlaEditorButton } from "editor-api";
   function buildFilterControls(modal) {
     const list = createElement("div", "sjx-smartpaste-options-grid");
 
-    FILTER_ORDER.forEach((key) => {
-      const label = createElement("label", "sjx-smartpaste-option");
-      const input = document.createElement("input");
-      input.type = "checkbox";
-      input.checked = Boolean(modal.defaultFilters[key]);
+    FILTER_ORDER.forEach((key, index) => {
+      const title = modal.options.strings.optionTitles[key] || modal.options.strings.options[key];
+      const row = createElement("div", "sjx-smartpaste-toggle");
+      const copy = createElement("div", "sjx-smartpaste-toggle__copy");
+      const label = createElement("span", "sjx-smartpaste-toggle__label", modal.options.strings.options[key]);
+      const controls = createElement("div", "sjx-smartpaste-toggle__controls btn-group");
+      const name = `sjx-smartpaste-filter-${key}`;
+      const yesId = `${name}-yes-${index}`;
+      const noId = `${name}-no-${index}`;
+      const yesInput = document.createElement("input");
+      const noInput = document.createElement("input");
+      const yesLabel = createElement("label", "btn btn-outline-success btn-sm sjx-smartpaste-toggle__button", modal.options.strings.buttons.yes);
+      const noLabel = createElement("label", "btn btn-outline-secondary btn-sm sjx-smartpaste-toggle__button", modal.options.strings.buttons.no);
 
-      const copy = createElement("span", "sjx-smartpaste-option__label", modal.options.strings.options[key]);
+      row.title = title;
+      copy.title = title;
+      label.title = title;
+      copy.appendChild(label);
 
-      input.addEventListener("change", () => {
-        updateWorkspace(modal);
+      controls.setAttribute("role", "group");
+      controls.setAttribute("aria-label", title);
+
+      yesInput.type = "radio";
+      yesInput.className = "btn-check sjx-smartpaste-toggle__input";
+      yesInput.name = name;
+      yesInput.id = yesId;
+      yesInput.autocomplete = "off";
+      yesInput.checked = Boolean(modal.defaultFilters[key]);
+
+      noInput.type = "radio";
+      noInput.className = "btn-check sjx-smartpaste-toggle__input";
+      noInput.name = name;
+      noInput.id = noId;
+      noInput.autocomplete = "off";
+      noInput.checked = !Boolean(modal.defaultFilters[key]);
+
+      yesInput.addEventListener("change", () => {
+        if (yesInput.checked) {
+          updateWorkspace(modal);
+        }
       });
 
-      modal.filterInputs[key] = input;
-      label.append(input, copy);
-      list.appendChild(label);
+      noInput.addEventListener("change", () => {
+        if (noInput.checked) {
+          updateWorkspace(modal);
+        }
+      });
+
+      yesLabel.htmlFor = yesId;
+      noLabel.htmlFor = noId;
+      yesLabel.title = title;
+      noLabel.title = title;
+
+      modal.filterInputs[key] = {
+        yes: yesInput,
+        no: noInput
+      };
+
+      controls.append(yesInput, yesLabel, noInput, noLabel);
+      row.append(copy, controls);
+      list.appendChild(row);
     });
 
     return list;
@@ -686,6 +761,7 @@ import { JoomlaEditorButton } from "editor-api";
     const pasteId = "sjx-smartpaste-paste-surface";
     const sourceId = "sjx-smartpaste-source-html";
     const outputId = "sjx-smartpaste-output-html";
+    const htmlSectionId = "sjx-smartpaste-html-panel";
     const backdrop = createElement("div", "sjx-smartpaste-modal-backdrop");
     backdrop.hidden = true;
 
@@ -711,6 +787,7 @@ import { JoomlaEditorButton } from "editor-api";
     status.hidden = true;
 
     const workspace = createElement("div", "sjx-smartpaste-workspace");
+    const topRow = createElement("div", "sjx-smartpaste-workspace__top");
 
     const sourcePanel = createElement("section", "sjx-smartpaste-panel sjx-smartpaste-panel--source");
     const sourceHeader = createElement("div", "sjx-smartpaste-panel__header");
@@ -719,10 +796,15 @@ import { JoomlaEditorButton } from "editor-api";
     const useSelectionButton = createElement("button", "btn btn-sm btn-outline-secondary");
     useSelectionButton.type = "button";
     useSelectionButton.textContent = options.strings.buttons.useSelection;
+    const htmlToggleButton = createElement("button", "btn btn-sm btn-outline-secondary");
+    htmlToggleButton.type = "button";
+    htmlToggleButton.textContent = options.strings.buttons.showHtml;
+    htmlToggleButton.setAttribute("aria-controls", htmlSectionId);
+    htmlToggleButton.setAttribute("aria-expanded", "false");
     const clearButton = createElement("button", "btn btn-sm btn-outline-secondary");
     clearButton.type = "button";
     clearButton.textContent = options.strings.buttons.clear;
-    sourceActions.append(useSelectionButton, clearButton);
+    sourceActions.append(useSelectionButton, htmlToggleButton, clearButton);
     sourceHeader.append(sourceTitle, sourceActions);
 
     const pasteHint = createElement("p", "sjx-smartpaste-panel__hint", options.strings.pasteHint);
@@ -737,10 +819,26 @@ import { JoomlaEditorButton } from "editor-api";
     const sourceTextarea = createElement("textarea", "sjx-smartpaste-source");
     sourceTextarea.id = sourceId;
     sourceTextarea.rows = 12;
+    const htmlSection = createElement("div", "sjx-smartpaste-html");
+    htmlSection.id = htmlSectionId;
+    htmlSection.hidden = true;
+    htmlSection.append(htmlLabel, htmlHint, sourceTextarea);
 
-    sourcePanel.append(sourceHeader, pasteHint, pasteSurface, htmlLabel, htmlHint, sourceTextarea);
+    sourcePanel.append(sourceHeader, pasteHint, pasteSurface, htmlSection);
 
-    const sideColumn = createElement("div", "sjx-smartpaste-side");
+    const previewPanel = createElement("section", "sjx-smartpaste-panel sjx-smartpaste-panel--preview");
+    const previewHeader = createElement("div", "sjx-smartpaste-panel__header");
+    const previewTitle = createElement("h3", "sjx-smartpaste-panel__title", options.strings.previewTitle);
+    previewHeader.appendChild(previewTitle);
+    const preview = createElement("div", "sjx-smartpaste-preview");
+    const outputLabel = createElement("label", "sjx-smartpaste-field__label", options.strings.outputLabel);
+    outputLabel.setAttribute("for", outputId);
+    const outputHint = createElement("p", "sjx-smartpaste-field__hint", options.strings.outputHint);
+    const outputTextarea = createElement("textarea", "sjx-smartpaste-output");
+    outputTextarea.id = outputId;
+    outputTextarea.rows = 8;
+    outputTextarea.readOnly = true;
+    previewPanel.append(previewHeader, preview, outputLabel, outputHint, outputTextarea);
 
     const analysisPanel = createElement("section", "sjx-smartpaste-panel");
     const analysisHeader = createElement("div", "sjx-smartpaste-panel__header");
@@ -756,22 +854,8 @@ import { JoomlaEditorButton } from "editor-api";
     optionsHeader.appendChild(optionsTitle);
     optionsPanel.append(optionsHeader);
 
-    const previewPanel = createElement("section", "sjx-smartpaste-panel sjx-smartpaste-panel--preview");
-    const previewHeader = createElement("div", "sjx-smartpaste-panel__header");
-    const previewTitle = createElement("h3", "sjx-smartpaste-panel__title", options.strings.previewTitle);
-    previewHeader.appendChild(previewTitle);
-    const preview = createElement("div", "sjx-smartpaste-preview");
-    const outputLabel = createElement("label", "sjx-smartpaste-field__label", options.strings.outputLabel);
-    outputLabel.setAttribute("for", outputId);
-    const outputHint = createElement("p", "sjx-smartpaste-field__hint", options.strings.outputHint);
-    const outputTextarea = createElement("textarea", "sjx-smartpaste-output");
-    outputTextarea.id = outputId;
-    outputTextarea.rows = 10;
-    outputTextarea.readOnly = true;
-    previewPanel.append(previewHeader, preview, outputLabel, outputHint, outputTextarea);
-
-    sideColumn.append(analysisPanel, optionsPanel, previewPanel);
-    workspace.append(sourcePanel, sideColumn);
+    topRow.append(sourcePanel, previewPanel);
+    workspace.append(topRow, analysisPanel, optionsPanel);
 
     body.append(intro, note, status, workspace);
 
@@ -805,6 +889,8 @@ import { JoomlaEditorButton } from "editor-api";
       note,
       status,
       pasteSurface,
+      htmlSection,
+      htmlToggleButton,
       sourceTextarea,
       analysisBody,
       preview,
@@ -818,6 +904,7 @@ import { JoomlaEditorButton } from "editor-api";
       options,
       defaultFilters: cloneDefaultFilters(),
       editor: null,
+      htmlVisible: false,
       initialSource: "",
       selectionSource: "",
       previousActiveElement: null
@@ -864,6 +951,16 @@ import { JoomlaEditorButton } from "editor-api";
 
     sourceTextarea.addEventListener("input", () => {
       updateWorkspace(modalState);
+    });
+
+    htmlToggleButton.addEventListener("click", () => {
+      setHtmlPanelVisibility(modalState, !modalState.htmlVisible);
+
+      if (modalState.htmlVisible) {
+        modalState.sourceTextarea.focus();
+      } else {
+        modalState.pasteSurface.focus();
+      }
     });
 
     clearButton.addEventListener("click", () => {
@@ -921,6 +1018,7 @@ import { JoomlaEditorButton } from "editor-api";
     modal.insertButton.textContent = modal.options.strings.buttons.insert;
     modal.pasteSurface.setAttribute("data-placeholder", modal.options.strings.pastePlaceholder);
     modal.useSelectionButton.disabled = selectionSource.trim() === "";
+    setHtmlPanelVisibility(modal, false);
 
     applyFiltersToInputs(modal, modal.defaultFilters);
     loadSourceIntoWorkspace(modal, selectionSource, { syncSurface: true });
@@ -933,12 +1031,7 @@ import { JoomlaEditorButton } from "editor-api";
     window.setTimeout(() => {
       modal.dialog.focus();
 
-      if (selectionSource) {
-        modal.sourceTextarea.focus();
-        modal.sourceTextarea.setSelectionRange(0, modal.sourceTextarea.value.length);
-      } else {
-        modal.pasteSurface.focus();
-      }
+      modal.pasteSurface.focus();
     }, 0);
   }
 

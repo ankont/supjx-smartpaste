@@ -18,7 +18,7 @@ use Joomla\Event\SubscriberInterface;
 
 final class SmartPaste extends CMSPlugin implements SubscriberInterface
 {
-    private const VERSION = '0.2.0';
+    private const VERSION = '0.2.1';
     private const SCRIPT_OPTIONS_KEY = 'plg_editors_xtd_smartpaste';
 
     protected $autoloadLanguage = true;
@@ -121,11 +121,15 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                 'outputHint' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OUTPUT_HINT'),
                 'buttons' => [
                     'useSelection' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_USE_SELECTION'),
+                    'showHtml' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SHOW_HTML'),
+                    'hideHtml' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_HIDE_HTML'),
                     'clear' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_CLEAR'),
                     'reset' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_RESET'),
                     'cancel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CANCEL'),
                     'insert' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_INSERT_CLEAN'),
                     'close' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CLOSE'),
+                    'yes' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_YES'),
+                    'no' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_NO'),
                 ],
                 'counts' => [
                     'styles' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_STYLES'),
@@ -147,6 +151,17 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                     'removeOfficeMarkup' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_OFFICE'),
                     'removeEmptySpans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_EMPTY_SPANS'),
                     'semanticFormatting' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_SEMANTIC'),
+                ],
+                'optionTitles' => [
+                    'keepInlineStyles' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_INLINE_STYLES_TITLE'),
+                    'keepClasses' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_CLASSES_TITLE'),
+                    'keepLinks' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_LINKS_TITLE'),
+                    'keepImages' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_IMAGES_TITLE'),
+                    'keepTables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_TABLES_TITLE'),
+                    'removeComments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_COMMENTS_TITLE'),
+                    'removeOfficeMarkup' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_OFFICE_TITLE'),
+                    'removeEmptySpans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_EMPTY_SPANS_TITLE'),
+                    'semanticFormatting' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_SEMANTIC_TITLE'),
                 ],
             ],
         ];
