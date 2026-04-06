@@ -11,7 +11,7 @@ The intended long-term workflow is:
 5. Choose what should be kept or removed.
 6. Insert cleaned, controlled HTML back into the active editor.
 
-This repository does not implement the full product yet. It provides a clean, realistic starter scaffold for future development.
+This repository now provides an installable Joomla starter package plus an early working SmartPaste workspace for future development.
 
 ## What Is Included
 
@@ -29,18 +29,19 @@ Current repository structure:
 
 ## Current Status
 
-The scaffold currently gives you:
+The current package gives you:
 
 - a Joomla 5.4+ / 6.x package manifest
 - a Joomla-correct `editors-xtd` plugin manifest and namespace structure
 - DI service provider wiring for Joomla 5-style plugin bootstrapping
 - a working editor toolbar button registered with the action id `supersoft-smartpaste`
-- a lightweight modal placeholder workflow loaded through `WebAssetManager`
-- placeholder insertion back into the active editor using the shared Joomla editor button API
+- a real client-side SmartPaste workspace opened from the editor toolbar
+- a rich paste pad, raw HTML source area, detected-formatting summary, cleanup toggles, clean preview, and generated HTML output
+- insertion of cleaned HTML back into the active editor using the shared Joomla editor button API
 - English and Greek language files for the package and plugin
 - a straightforward PowerShell build script for producing installable zip files
 
-The modal is intentionally minimal. For now it accepts pasted input and inserts escaped placeholder HTML so the end-to-end workflow can be validated safely.
+This is still an early implementation. The workspace is client-side only and intentionally conservative, but it already supports a realistic inspect-clean-preview-insert flow.
 
 ## Architectural Direction
 
@@ -57,11 +58,9 @@ That means the product direction is not "clean whatever the browser pasted" and 
 
 Near-term next steps:
 
-- replace the placeholder modal with a richer import workspace
-- accept and normalize pasted rich HTML
-- detect formatting groups and expose keep/remove choices
-- preview cleaned output before insertion
-- introduce a small internal model for controlled HTML generation
+- improve the cleanup rules with stronger Word-specific handling and better table/image transformations
+- introduce presets and reusable cleanup profiles
+- evolve the client-side workspace into a more explicit internal import model
 
 Likely later work:
 
@@ -87,17 +86,17 @@ powershell -ExecutionPolicy Bypass -File .\build\build.ps1
 The build creates:
 
 - `build/output/plg_editors_xtd_smartpaste.zip`
-- `build/output/pkg_smartpaste_v0.1.3.zip`
+- `build/output/pkg_smartpaste_v0.2.0.zip`
 
 The package zip is the normal installer artifact for Joomla. The plugin zip is also produced separately for convenience.
 
 ## Install
 
 1. Build the package.
-2. In Joomla administrator, install `build/output/pkg_smartpaste_v0.1.3.zip`.
+2. In Joomla administrator, install `build/output/pkg_smartpaste_v0.2.0.zip`.
 3. Enable `Button - SuperSoftJx - SmartPaste` if it is not enabled automatically.
 4. Open a supported editor in the administrator area and confirm the `SmartPaste` button appears.
-5. Click the button to open the placeholder modal and insert test content.
+5. Click the button to open the SmartPaste workspace, paste test content, review the preview, and insert cleaned HTML.
 
 ## Development Notes
 

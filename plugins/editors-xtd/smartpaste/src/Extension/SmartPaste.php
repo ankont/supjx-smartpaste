@@ -18,6 +18,7 @@ use Joomla\Event\SubscriberInterface;
 
 final class SmartPaste extends CMSPlugin implements SubscriberInterface
 {
+    private const VERSION = '0.2.0';
     private const SCRIPT_OPTIONS_KEY = 'plg_editors_xtd_smartpaste';
 
     protected $autoloadLanguage = true;
@@ -79,32 +80,75 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
 
         $wa = $document->getWebAssetManager();
         $mediaBase = rtrim(Uri::root(true), '/') . '/media/plg_editors_xtd_smartpaste';
+        $versionSuffix = '?v=' . rawurlencode(self::VERSION);
 
-        $document->addScriptOptions(
-            self::SCRIPT_OPTIONS_KEY,
-            [
-                'defaultInsertText' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_DEFAULT_INSERT_TEXT'),
-                'strings' => [
-                    'modalTitle' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_TITLE'),
-                    'modalIntro' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_INTRO'),
-                    'modalNote' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_NOTE'),
-                    'textareaLabel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_SOURCE_LABEL'),
-                    'textareaPlaceholder' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_SOURCE_PLACEHOLDER'),
-                    'cancel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CANCEL'),
-                    'insert' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_INSERT'),
-                    'close' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CLOSE'),
-                ],
-            ]
-        );
+        $document->addScriptOptions(self::SCRIPT_OPTIONS_KEY, $this->getWorkspaceOptions());
 
         $wa->useScript('editors');
-        $document->addStyleSheet($mediaBase . '/smartpaste-editor.css');
+        $document->addStyleSheet($mediaBase . '/smartpaste-editor.css' . $versionSuffix);
         $document->addCustomTag(
             '<script type="module" src="'
-            . htmlspecialchars($mediaBase . '/smartpaste-editor.js?v=0.1.3', ENT_COMPAT, 'UTF-8')
+            . htmlspecialchars($mediaBase . '/smartpaste-editor.js' . $versionSuffix, ENT_COMPAT, 'UTF-8')
             . '"></script>'
         );
 
         $loaded = true;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getWorkspaceOptions(): array
+    {
+        return [
+            'strings' => [
+                'title' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_TITLE'),
+                'intro' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_WORKSPACE_INTRO'),
+                'note' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_WORKSPACE_NOTE'),
+                'selectionLoaded' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SELECTION_LOADED'),
+                'pasteLabel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PASTE_LABEL'),
+                'pasteHint' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PASTE_HINT'),
+                'pastePlaceholder' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PASTE_PLACEHOLDER'),
+                'htmlLabel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_HTML_LABEL'),
+                'htmlHint' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_HTML_HINT'),
+                'analysisTitle' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_ANALYSIS_TITLE'),
+                'analysisEmpty' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_ANALYSIS_EMPTY'),
+                'unsafeNotice' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_UNSAFE_NOTICE'),
+                'optionsTitle' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPTIONS_TITLE'),
+                'previewTitle' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PREVIEW_TITLE'),
+                'previewEmpty' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PREVIEW_EMPTY'),
+                'outputLabel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OUTPUT_LABEL'),
+                'outputHint' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OUTPUT_HINT'),
+                'buttons' => [
+                    'useSelection' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_USE_SELECTION'),
+                    'clear' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_CLEAR'),
+                    'reset' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_RESET'),
+                    'cancel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CANCEL'),
+                    'insert' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_INSERT_CLEAN'),
+                    'close' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CLOSE'),
+                ],
+                'counts' => [
+                    'styles' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_STYLES'),
+                    'classes' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_CLASSES'),
+                    'links' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_LINKS'),
+                    'images' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_IMAGES'),
+                    'tables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_TABLES'),
+                    'comments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_COMMENTS'),
+                    'office' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_OFFICE'),
+                    'unsafe' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_UNSAFE'),
+                ],
+                'options' => [
+                    'keepInlineStyles' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_INLINE_STYLES'),
+                    'keepClasses' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_CLASSES'),
+                    'keepLinks' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_LINKS'),
+                    'keepImages' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_IMAGES'),
+                    'keepTables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_TABLES'),
+                    'removeComments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_COMMENTS'),
+                    'removeOfficeMarkup' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_OFFICE'),
+                    'removeEmptySpans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_EMPTY_SPANS'),
+                    'semanticFormatting' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_SEMANTIC'),
+                ],
+            ],
+        ];
     }
 }

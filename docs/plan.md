@@ -12,16 +12,16 @@ SmartPaste is a Joomla-native smart paste and controlled content import tool for
 - Import content from Google Docs or similar editors into Joomla without locking the workflow to one specific editor integration.
 - Give site builders an intentional import flow for controlled HTML rather than depending on whatever the browser paste result happens to be.
 
-## Current Scaffold Status
+## Current Workspace Status
 
 This repository currently provides:
 
 - a Joomla package manifest for `pkg_smartpaste`
-- a minimal `editors-xtd` plugin for `plg_editors_xtd_smartpaste`
-- a working editor button action id and modal placeholder flow
+- an `editors-xtd` plugin for `plg_editors_xtd_smartpaste`
+- a working editor button action id and client-side SmartPaste workspace
 - a build script that packages the plugin zip and the package zip
 
-This is intentionally a starter baseline. It proves the extension wiring, packaging, asset loading, and button-to-modal workflow without pretending the content-analysis engine already exists.
+The current workspace already includes a rich paste pad, raw HTML editing, detected-formatting counts, cleanup toggles, a cleaned preview, and final HTML insertion back into the editor. It is still intentionally client-side and early-stage, but it now exercises the real modal workflow rather than a placeholder.
 
 ## Practical V1 Scope
 
@@ -50,7 +50,7 @@ V1 should stay focused on reliable import decisions and transparent output, not 
 - Keep the workflow Joomla-native and editor-agnostic through `editors-xtd` plus the shared editor API.
 - Treat the modal as the center of the UX, not as a thin editor-specific popup.
 - Keep the initial plugin client-side and self-contained until the real parsing and cleaning requirements justify server-side services.
-- Use `WebAssetManager` and namespaced plugin code from the start to avoid retrofitting Joomla 5/6 conventions later.
+- Use Joomla-native asset loading and namespaced plugin code from the start to avoid retrofitting Joomla 5/6 conventions later.
 - Keep package assembly simple: repo source at the top level, installable zips produced into `build/output`.
 
 ## Non-Goals
