@@ -75,10 +75,28 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
         }
 
         $wa = $document->getWebAssetManager();
-        $registryPath = JPATH_ROOT . '/media/plg_editors_xtd_smartpaste/joomla.asset.json';
+        $registryPath = JPATH_SITE . '/media/plg_editors_xtd_smartpaste/joomla.asset.json';
 
         if (\is_file($registryPath)) {
             $wa->getRegistry()->addRegistryFile($registryPath);
+        }
+
+        if (!method_exists($wa, 'assetExists') || !$wa->assetExists('script', self::ASSET_NAME)) {
+            $wa->registerScript(
+                self::ASSET_NAME,
+                'plg_editors_xtd_smartpaste/smartpaste-editor.js',
+                ['version' => 'auto'],
+                ['type' => 'module'],
+                ['editors']
+            );
+        }
+
+        if (!method_exists($wa, 'assetExists') || !$wa->assetExists('style', self::ASSET_NAME)) {
+            $wa->registerStyle(
+                self::ASSET_NAME,
+                'plg_editors_xtd_smartpaste/smartpaste-editor.css',
+                ['version' => 'auto']
+            );
         }
 
         $document->addScriptOptions(

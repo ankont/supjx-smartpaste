@@ -87,14 +87,14 @@ powershell -ExecutionPolicy Bypass -File .\build\build.ps1
 The build creates:
 
 - `build/output/plg_editors_xtd_smartpaste.zip`
-- `build/output/pkg_smartpaste_v0.1.1.zip`
+- `build/output/pkg_smartpaste_v0.1.2.zip`
 
 The package zip is the normal installer artifact for Joomla. The plugin zip is also produced separately for convenience.
 
 ## Install
 
 1. Build the package.
-2. In Joomla administrator, install `build/output/pkg_smartpaste_v0.1.1.zip`.
+2. In Joomla administrator, install `build/output/pkg_smartpaste_v0.1.2.zip`.
 3. Enable `Button - SuperSoftJx - SmartPaste` if it is not enabled automatically.
 4. Open a supported editor in the administrator area and confirm the `SmartPaste` button appears.
 5. Click the button to open the placeholder modal and insert test content.
