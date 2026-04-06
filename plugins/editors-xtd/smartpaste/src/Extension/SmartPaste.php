@@ -18,7 +18,7 @@ use Joomla\Event\SubscriberInterface;
 
 final class SmartPaste extends CMSPlugin implements SubscriberInterface
 {
-    private const VERSION = '0.2.1';
+    private const VERSION = '0.2.2';
     private const SCRIPT_OPTIONS_KEY = 'plg_editors_xtd_smartpaste';
 
     protected $autoloadLanguage = true;
@@ -103,18 +103,15 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
         return [
             'strings' => [
                 'title' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_TITLE'),
-                'intro' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_WORKSPACE_INTRO'),
-                'note' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_WORKSPACE_NOTE'),
+                'titleDetail' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_HEADER_DETAIL'),
                 'selectionLoaded' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SELECTION_LOADED'),
                 'pasteLabel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PASTE_LABEL'),
                 'pasteHint' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PASTE_HINT'),
                 'pastePlaceholder' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PASTE_PLACEHOLDER'),
                 'htmlLabel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_HTML_LABEL'),
                 'htmlHint' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_HTML_HINT'),
-                'analysisTitle' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_ANALYSIS_TITLE'),
-                'analysisEmpty' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_ANALYSIS_EMPTY'),
                 'unsafeNotice' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_UNSAFE_NOTICE'),
-                'optionsTitle' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPTIONS_TITLE'),
+                'formattingTitle' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_FORMATTING_TITLE'),
                 'previewTitle' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PREVIEW_TITLE'),
                 'previewEmpty' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_PREVIEW_EMPTY'),
                 'outputLabel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OUTPUT_LABEL'),
@@ -122,7 +119,8 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                 'buttons' => [
                     'useSelection' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_USE_SELECTION'),
                     'showHtml' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SHOW_HTML'),
-                    'hideHtml' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_HIDE_HTML'),
+                    'showPaste' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SHOW_PASTE'),
+                    'showPreview' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_SHOW_PREVIEW'),
                     'clear' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_CLEAR'),
                     'reset' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_RESET'),
                     'cancel' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CANCEL'),
@@ -130,6 +128,7 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                     'close' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_MODAL_CLOSE'),
                     'yes' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_YES'),
                     'no' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_NO'),
+                    'auto' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_AUTO'),
                 ],
                 'counts' => [
                     'styles' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_STYLES'),
@@ -137,8 +136,11 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                     'links' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_LINKS'),
                     'images' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_IMAGES'),
                     'tables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_TABLES'),
+                    'lang' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_LANG'),
                     'comments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_COMMENTS'),
                     'office' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_OFFICE'),
+                    'spans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_SPANS'),
+                    'semantic' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_SEMANTIC'),
                     'unsafe' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_COUNT_UNSAFE'),
                 ],
                 'options' => [
@@ -147,10 +149,12 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                     'keepLinks' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_LINKS'),
                     'keepImages' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_IMAGES'),
                     'keepTables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_TABLES'),
+                    'keepLang' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_LANG'),
                     'removeComments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_COMMENTS'),
                     'removeOfficeMarkup' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_OFFICE'),
                     'removeEmptySpans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_EMPTY_SPANS'),
                     'semanticFormatting' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_SEMANTIC'),
+                    'unsafe' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_UNSAFE'),
                 ],
                 'optionTitles' => [
                     'keepInlineStyles' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_INLINE_STYLES_TITLE'),
@@ -158,10 +162,12 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
                     'keepLinks' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_LINKS_TITLE'),
                     'keepImages' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_IMAGES_TITLE'),
                     'keepTables' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_TABLES_TITLE'),
+                    'keepLang' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_KEEP_LANG_TITLE'),
                     'removeComments' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_COMMENTS_TITLE'),
                     'removeOfficeMarkup' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_OFFICE_TITLE'),
                     'removeEmptySpans' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_REMOVE_EMPTY_SPANS_TITLE'),
                     'semanticFormatting' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_SEMANTIC_TITLE'),
+                    'unsafe' => Text::_('PLG_EDITORS-XTD_SMARTPASTE_OPT_UNSAFE_TITLE'),
                 ],
             ],
         ];
