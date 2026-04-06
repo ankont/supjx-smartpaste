@@ -13,11 +13,11 @@ use Joomla\CMS\Event\Editor\EditorButtonsSetupEvent;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Event\SubscriberInterface;
 
 final class SmartPaste extends CMSPlugin implements SubscriberInterface
 {
-    private const ASSET_NAME = 'plg.editorsxtd.smartpaste';
     private const SCRIPT_OPTIONS_KEY = 'plg_editors_xtd_smartpaste';
 
     protected $autoloadLanguage = true;
@@ -70,34 +70,15 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
 
         $document = Factory::getApplication()->getDocument();
 
-        if (!method_exists($document, 'getWebAssetManager') || !method_exists($document, 'addScriptOptions')) {
+        if (!method_exists($document, 'getWebAssetManager')
+            || !method_exists($document, 'addScriptOptions')
+            || !method_exists($document, 'addStyleSheet')
+            || !method_exists($document, 'addCustomTag')) {
             return;
         }
 
         $wa = $document->getWebAssetManager();
-        $registryPath = JPATH_SITE . '/media/plg_editors_xtd_smartpaste/joomla.asset.json';
-
-        if (\is_file($registryPath)) {
-            $wa->getRegistry()->addRegistryFile($registryPath);
-        }
-
-        if (!method_exists($wa, 'assetExists') || !$wa->assetExists('script', self::ASSET_NAME)) {
-            $wa->registerScript(
-                self::ASSET_NAME,
-                'plg_editors_xtd_smartpaste/smartpaste-editor.js',
-                ['version' => 'auto'],
-                ['type' => 'module'],
-                ['editors']
-            );
-        }
-
-        if (!method_exists($wa, 'assetExists') || !$wa->assetExists('style', self::ASSET_NAME)) {
-            $wa->registerStyle(
-                self::ASSET_NAME,
-                'plg_editors_xtd_smartpaste/smartpaste-editor.css',
-                ['version' => 'auto']
-            );
-        }
+        $mediaBase = rtrim(Uri::root(true), '/') . '/media/plg_editors_xtd_smartpaste';
 
         $document->addScriptOptions(
             self::SCRIPT_OPTIONS_KEY,
@@ -117,8 +98,12 @@ final class SmartPaste extends CMSPlugin implements SubscriberInterface
         );
 
         $wa->useScript('editors');
-        $wa->useScript(self::ASSET_NAME);
-        $wa->useStyle(self::ASSET_NAME);
+        $document->addStyleSheet($mediaBase . '/smartpaste-editor.css');
+        $document->addCustomTag(
+            '<script type="module" src="'
+            . htmlspecialchars($mediaBase . '/smartpaste-editor.js?v=0.1.3', ENT_COMPAT, 'UTF-8')
+            . '"></script>'
+        );
 
         $loaded = true;
     }
