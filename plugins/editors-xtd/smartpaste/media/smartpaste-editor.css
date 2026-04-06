@@ -133,7 +133,8 @@
 
 .sjx-smartpaste-panel--source,
 .sjx-smartpaste-panel--preview {
-  min-height: 0;
+  min-height: clamp(24rem, 52vh, 33rem);
+  max-height: clamp(24rem, 52vh, 33rem);
 }
 
 .sjx-smartpaste-panel__header {
@@ -153,6 +154,7 @@
   display: flex;
   flex: 1 1 auto;
   min-height: 0;
+  overflow: hidden;
 }
 
 .sjx-smartpaste-pane {
@@ -172,11 +174,12 @@
   align-items: center;
   justify-content: flex-end;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.45rem;
 }
 
 .sjx-smartpaste-panel__actions--footer {
   padding-top: 0.1rem;
+  border-top: 1px solid rgba(15, 23, 42, 0.06);
 }
 
 .sjx-smartpaste-field__label {
@@ -195,14 +198,16 @@
 }
 
 .sjx-smartpaste-paste-surface {
-  min-height: 19rem;
+  flex: 1 1 auto;
+  min-height: 0;
   padding: 1rem;
   overflow: auto;
   line-height: 1.55;
 }
 
 .sjx-smartpaste-preview {
-  min-height: 19rem;
+  flex: 1 1 auto;
+  min-height: 0;
   padding: 1rem;
   overflow: auto;
   border: 1px solid rgba(15, 23, 42, 0.12);
@@ -232,7 +237,9 @@
 
 .sjx-smartpaste-source,
 .sjx-smartpaste-output {
-  min-height: 19rem;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: 100%;
   padding: 0.9rem 1rem;
   resize: none;
   font-family: Consolas, "Courier New", monospace;
@@ -246,17 +253,17 @@
 
 .sjx-smartpaste-formatting-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.65rem;
 }
 
 .sjx-smartpaste-formatting-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.75rem 0.85rem;
-  border-radius: 0.85rem;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.8rem;
   background: rgba(241, 245, 249, 0.9);
   transition: opacity 0.18s ease;
 }
@@ -269,13 +276,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.1rem;
-  height: 2.1rem;
-  padding: 0 0.45rem;
+  min-width: 1.95rem;
+  height: 1.95rem;
+  padding: 0 0.35rem;
   border-radius: 999px;
   background: rgba(13, 110, 253, 0.14);
   color: #0f172a;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   font-weight: 700;
 }
 
@@ -287,7 +294,7 @@
   display: block;
   overflow: hidden;
   font-weight: 600;
-  line-height: 1.3;
+  line-height: 1.25;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -298,7 +305,7 @@
 }
 
 .sjx-smartpaste-toggle__button {
-  min-width: 3.2rem;
+  min-width: 3rem;
   white-space: nowrap;
 }
 
@@ -336,6 +343,12 @@
 @media (max-width: 1180px) {
   .sjx-smartpaste-workspace__top {
     grid-template-columns: 1fr;
+  }
+
+  .sjx-smartpaste-panel--source,
+  .sjx-smartpaste-panel--preview {
+    min-height: 26rem;
+    max-height: 26rem;
   }
 }
 

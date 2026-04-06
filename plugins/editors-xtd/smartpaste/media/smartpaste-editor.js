@@ -33,16 +33,16 @@ import { JoomlaEditorButton } from "editor-api";
     "semanticFormatting"
   ];
   const FORMATTING_ITEMS = [
-    { analysisKey: "styles", filterKey: "keepInlineStyles" },
-    { analysisKey: "classes", filterKey: "keepClasses" },
-    { analysisKey: "links", filterKey: "keepLinks" },
-    { analysisKey: "images", filterKey: "keepImages" },
-    { analysisKey: "tables", filterKey: "keepTables" },
-    { analysisKey: "lang", filterKey: "keepLang" },
-    { analysisKey: "comments", filterKey: "removeComments" },
-    { analysisKey: "office", filterKey: "removeOfficeMarkup" },
-    { analysisKey: "spans", filterKey: "removeEmptySpans" },
-    { analysisKey: "semantic", filterKey: "semanticFormatting" },
+    { analysisKey: "styles", filterKey: "keepInlineStyles", enabledVerb: "keep", disabledVerb: "drop" },
+    { analysisKey: "classes", filterKey: "keepClasses", enabledVerb: "keep", disabledVerb: "drop" },
+    { analysisKey: "links", filterKey: "keepLinks", enabledVerb: "keep", disabledVerb: "drop" },
+    { analysisKey: "images", filterKey: "keepImages", enabledVerb: "keep", disabledVerb: "drop" },
+    { analysisKey: "tables", filterKey: "keepTables", enabledVerb: "keep", disabledVerb: "drop" },
+    { analysisKey: "lang", filterKey: "keepLang", enabledVerb: "keep", disabledVerb: "drop" },
+    { analysisKey: "comments", filterKey: "removeComments", enabledVerb: "remove", disabledVerb: "keep" },
+    { analysisKey: "office", filterKey: "removeOfficeMarkup", enabledVerb: "remove", disabledVerb: "keep" },
+    { analysisKey: "spans", filterKey: "removeEmptySpans", enabledVerb: "unwrap", disabledVerb: "keep" },
+    { analysisKey: "semantic", filterKey: "semanticFormatting", enabledVerb: "convert", disabledVerb: "keep" },
     { analysisKey: "unsafe", mode: "auto" }
   ];
 
@@ -68,6 +68,7 @@ import { JoomlaEditorButton } from "editor-api";
         htmlHint: String(strings.htmlHint || "Optional raw HTML view for direct edits."),
         unsafeNotice: String(strings.unsafeNotice || "Unsafe tags such as scripts and iframes are always stripped."),
         formattingTitle: String(strings.formattingTitle || "Formatting & Cleanup"),
+        formattingEmpty: String(strings.formattingEmpty || "Paste or load content to see the detected formatting groups."),
         previewTitle: String(strings.previewTitle || "Clean Preview"),
         previewEmpty: String(strings.previewEmpty || "The cleaned preview will appear here."),
         outputLabel: String(strings.outputLabel || "Generated HTML"),
@@ -82,8 +83,11 @@ import { JoomlaEditorButton } from "editor-api";
           cancel: String(buttons.cancel || "Cancel"),
           insert: String(buttons.insert || "Insert Cleaned HTML"),
           close: String(buttons.close || "Close"),
-          yes: String(buttons.yes || "Yes"),
-          no: String(buttons.no || "No"),
+          keep: String(buttons.keep || "Keep"),
+          drop: String(buttons.drop || "Drop"),
+          remove: String(buttons.remove || "Remove"),
+          unwrap: String(buttons.unwrap || "Unwrap"),
+          convert: String(buttons.convert || "Convert"),
           auto: String(buttons.auto || "Auto")
         },
         counts: {
@@ -641,6 +645,8 @@ import { JoomlaEditorButton } from "editor-api";
   }
 
   function updateFormattingPanel(modal, analysis) {
+    let visibleCount = 0;
+
     FORMATTING_ITEMS.forEach((item) => {
       const row = modal.formattingRows[item.analysisKey];
 
@@ -650,8 +656,15 @@ import { JoomlaEditorButton } from "editor-api";
 
       const count = Number(analysis?.[item.analysisKey] || 0);
       row.count.textContent = String(count);
+      row.element.hidden = count === 0;
       row.element.classList.toggle("is-inactive", count === 0);
+
+      if (count > 0) {
+        visibleCount += 1;
+      }
     });
+
+    modal.formattingEmpty.hidden = visibleCount > 0;
   }
 
   function readFilters(modal) {
@@ -764,8 +777,8 @@ import { JoomlaEditorButton } from "editor-api";
         const noId = `${name}-no-${index}`;
         const yesInput = document.createElement("input");
         const noInput = document.createElement("input");
-        const yesLabel = createElement("label", "btn btn-outline-success btn-sm sjx-smartpaste-toggle__button", modal.options.strings.buttons.yes);
-        const noLabel = createElement("label", "btn btn-outline-secondary btn-sm sjx-smartpaste-toggle__button", modal.options.strings.buttons.no);
+        const yesLabel = createElement("label", "btn btn-outline-success btn-sm sjx-smartpaste-toggle__button", modal.options.strings.buttons[item.enabledVerb] || modal.options.strings.buttons.keep);
+        const noLabel = createElement("label", "btn btn-outline-secondary btn-sm sjx-smartpaste-toggle__button", modal.options.strings.buttons[item.disabledVerb] || modal.options.strings.buttons.drop);
 
         controls.setAttribute("role", "group");
         controls.setAttribute("aria-label", title);
@@ -819,6 +832,7 @@ import { JoomlaEditorButton } from "editor-api";
         count
       };
 
+      row.hidden = true;
       list.appendChild(row);
     });
 
@@ -940,6 +954,8 @@ import { JoomlaEditorButton } from "editor-api";
     const formattingHeader = createElement("div", "sjx-smartpaste-panel__header");
     const formattingTitle = createElement("h3", "sjx-smartpaste-panel__title", options.strings.formattingTitle);
     formattingHeader.appendChild(formattingTitle);
+    const formattingEmpty = createElement("p", "sjx-smartpaste-empty", options.strings.formattingEmpty);
+    formattingEmpty.hidden = true;
 
     topRow.append(sourcePanel, previewPanel);
     workspace.append(topRow, formattingPanel);
@@ -984,6 +1000,7 @@ import { JoomlaEditorButton } from "editor-api";
       previewHtmlView,
       previewToggleButton,
       outputTextarea,
+      formattingEmpty,
       useSelectionButton,
       clearButton,
       resetButton,
@@ -1001,7 +1018,7 @@ import { JoomlaEditorButton } from "editor-api";
       previousActiveElement: null
     };
 
-    formattingPanel.append(formattingHeader, buildFormattingControls(modalState));
+    formattingPanel.append(formattingHeader, formattingEmpty, buildFormattingControls(modalState));
 
     const close = () => {
       backdrop.hidden = true;
